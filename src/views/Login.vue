@@ -18,20 +18,17 @@ const auth = getAuth();
 const router = useRouter();
 
 function performLogin() {
-  signInWithRedirect(auth, provider)
-    .then(() => {
-      const functions = getFunctions();
-      const onSignIn = httpsCallable(functions, 'onSignIn');
-      return onSignIn();
-    })
-    .then(() => {
-      router.push({ name: 'home' });
-    });
+  signInWithRedirect(auth, provider);
 }
 
 getRedirectResult(getAuth())
-  .then((value) => {
-    console.log(value);
+  .then(() => {
+    const functions = getFunctions();
+    const onSignIn = httpsCallable(functions, 'onSignIn');
+    return onSignIn();
   })
-  .catch((err) => console.log(err));
+  .then(() => {
+    router.push({ name: 'home' });
+  })
+  .catch(() => {});
 </script>
