@@ -21,7 +21,7 @@ function performLogin() {
   signInWithRedirect(auth, provider);
 }
 
-getRedirectResult(getAuth())
+await getRedirectResult(getAuth())
   .then(() => {
     const functions = getFunctions();
     const onSignIn = httpsCallable(functions, 'onSignIn');
@@ -30,5 +30,5 @@ getRedirectResult(getAuth())
   .then(() => {
     router.push({ name: 'home' });
   })
-  .catch(() => {});
+  .catch(console.log);
 </script>
