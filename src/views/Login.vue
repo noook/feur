@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import {
-  getAuth, GoogleAuthProvider, signInWithRedirect,
+  getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
 } from 'firebase/auth';
 import GoogleButton from '@/components/GoogleButton.vue';
 import { useRouter } from 'vue-router';
@@ -29,9 +29,9 @@ function performLogin() {
     });
 }
 
-// getRedirectResult(getAuth())
-//   .then((value) => {
-//     console.log(value);
-//   })
-//   .catch((err) => console.log(err));
+getRedirectResult(getAuth())
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((err) => console.log(err));
 </script>
