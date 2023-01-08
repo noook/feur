@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import GoogleButton from '@/components/GoogleButton.vue';
 
 const provider = new GoogleAuthProvider();
@@ -14,7 +14,7 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth();
 
 function performLogin() {
-  signInWithPopup(auth, provider)
+  signInWithRedirect(auth, provider)
     .then(() => {
       const functions = getFunctions();
       const onSignIn = httpsCallable(functions, 'onSignIn');
