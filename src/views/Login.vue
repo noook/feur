@@ -8,10 +8,12 @@
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 import GoogleButton from '@/components/GoogleButton.vue';
+import { useRouter } from 'vue-router';
 
 const provider = new GoogleAuthProvider();
 
 const auth = getAuth();
+const router = useRouter();
 
 function performLogin() {
   signInWithRedirect(auth, provider)
@@ -19,6 +21,9 @@ function performLogin() {
       const functions = getFunctions();
       const onSignIn = httpsCallable(functions, 'onSignIn');
       return onSignIn();
+    })
+    .then(() => {
+      router.push({ name: 'home' });
     });
 }
 </script>
