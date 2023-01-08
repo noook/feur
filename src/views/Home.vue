@@ -48,7 +48,7 @@ getCountFromServer(collection(useFirestore(), 'feurs'))
         <li v-for="feur in feurs" :key="feur.id" class="py-4 text-sm">
           <div v-if="feur.context" class="mb-2">
             <span class="font-medium">Contexte:</span>
-            <p>{{ feur.context }}</p>
+            <p class="whitespace-pre">{{ feur.context }}</p>
           </div>
           <div class="flex items-center text-sm">
             <span>Signalé par {{ feur.reporter.name }}</span>
