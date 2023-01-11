@@ -2,11 +2,7 @@
   <div class="flex items-center justify-center h-screen">
     <div v-if="isSigninIn || isLoading" class="flex flex-col items-center gap-4">
       <p v-if="isSigninIn">Connexion en cours</p>
-      <div class="flex gap-x-1">
-        <div class="w-2.5 h-2.5 rounded-full bg-slate-800 animate-bounce " />
-        <div class="w-2.5 h-2.5 rounded-full bg-slate-800 animate-bounce animation-delay-200" />
-        <div class="w-2.5 h-2.5 rounded-full bg-slate-800 animate-bounce animation-delay-400" />
-      </div>
+      <Loader color="bg-slate-800" />
     </div>
     <GoogleButton v-else @click="performLogin" />
   </div>
@@ -20,6 +16,7 @@ import {
 } from 'firebase/auth';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import GoogleButton from '@/components/GoogleButton.vue';
+import Loader from '@/components/Loader.vue';
 
 const router = useRouter();
 

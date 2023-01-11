@@ -16,7 +16,13 @@
           placeholder="Voulez-vous donner du contexte à ce feur ?" />
       </div>
       <div class="flex justify-center">
-        <button class="h-8 px-2 bg-blue-400 text-white rounded" type="submit">Soumettre</button>
+        <button
+          :disabled="isSubmitting"
+          class="h-8 px-4 bg-blue-400 disabled:bg-gray-200 text-white rounded"
+          type="submit">
+          <Loader color="bg-gray-400" v-if="isSubmitting" />
+          <span v-else>Soumettre</span>
+        </button>
       </div>
     </form>
   </div>
@@ -29,6 +35,7 @@ import { getCurrentUser, useFirestore } from 'vuefire';
 import {
   addDoc, collection, doc, serverTimestamp,
 } from 'firebase/firestore';
+import Loader from '@/components/Loader.vue';
 
 const router = useRouter();
 
@@ -37,7 +44,11 @@ const context = ref('');
 const db = useFirestore();
 const currentUser = await getCurrentUser();
 
+const isSubmitting = ref(false);
+
 async function onSubmit() {
+  isSubmitting.value = true;
+
   await addDoc(
     collection(db, 'feurs'),
     {
