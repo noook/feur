@@ -1,34 +1,48 @@
 <template>
   <div class="flex items-center justify-center h-screen">
-    <GoogleButton @click="performLogin" />
+    <div v-if="isSigninIn || isLoading" class="flex flex-col items-center gap-4">
+      <p v-if="isSigninIn">Connexion en cours</p>
+      <div class="flex gap-x-1">
+        <div class="w-2.5 h-2.5 rounded-full bg-slate-800 animate-bounce " />
+        <div class="w-2.5 h-2.5 rounded-full bg-slate-800 animate-bounce animation-delay-200" />
+        <div class="w-2.5 h-2.5 rounded-full bg-slate-800 animate-bounce animation-delay-400" />
+      </div>
+    </div>
+    <GoogleButton v-else @click="performLogin" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { getFunctions, httpsCallable } from 'firebase/functions';
-import {
-  getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
-} from 'firebase/auth';
-import GoogleButton from '@/components/GoogleButton.vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import {
+  getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect,
+} from 'firebase/auth';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import GoogleButton from '@/components/GoogleButton.vue';
 
-const provider = new GoogleAuthProvider();
-
-const auth = getAuth();
 const router = useRouter();
 
 function performLogin() {
-  signInWithRedirect(auth, provider);
+  signInWithRedirect(getAuth(), new GoogleAuthProvider());
 }
 
-await getRedirectResult(getAuth())
-  .then(() => {
+const isLoading = ref(true);
+const isSigninIn = ref(false);
+
+async function init() {
+  const result = await getRedirectResult(getAuth());
+  isLoading.value = false;
+
+  if (result?.operationType === 'signIn') {
+    isSigninIn.value = true;
     const functions = getFunctions();
     const onSignIn = httpsCallable(functions, 'onSignIn');
-    return onSignIn();
-  })
-  .then(() => {
-    router.push({ name: 'home' });
-  })
-  .catch(console.log);
+    await onSignIn();
+    router.replace({ name: 'report' });
+  }
+}
+
+init();
+
 </script>
